@@ -9,3 +9,4 @@ Data set requirements: original image plus delineated contour mask
 2. wenjianjiacaozuo
 3. radiomic_feature
 4. URAN
+[figure2.pdf](https://github.com/user-attachments/files/19501710/figure2.pdf)
