@@ -18,20 +18,21 @@ The specific flow chart is shown below
 
 Usage
 1. JpgToNiftiConverter.py
+   
 Converts a folder of JPG images to NIfTI format.
 
-python JpgToNiftiConverter.py
-
 2. DataLoaderOrganizer.py
+
 Organizes images and labels into a single folder.
 
 3. RadiomicsFeatureExtractor.py
+   
 Extracts radiomics features from medical images.
 
 4. URAN.py
+   
 Predicts HER2 status changes using a URAN model.
 
-python URAN.py
 
 Contributing
 Contributions are welcome! Please submit a pull request or open an issue for suggestions or bug reports.
