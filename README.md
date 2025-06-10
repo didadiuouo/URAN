@@ -5,7 +5,7 @@ The repository contains the URAN executable code, which can be run completely by
 
 Data set requirements: original image plus delineated contour mask
 
-1. jpg2nii
+1. pic2nii
 2. wenjianjiacaozuo
 3. radiomic_feature
 4. URAN
