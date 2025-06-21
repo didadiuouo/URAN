@@ -1,7 +1,6 @@
 '''
-说明：文件操作，读取最后一个下划线的位置，生成病号名文件夹，并把病号图片或nii文件放到对应文件夹
-使用时放在需要操作的文件夹下
-
+Description: File operation, read the position of the last underline, generate the patient name folder, and place the patient image or nii file in the corresponding folder
+When in use, place it in the folder where the operation is needed
 '''
 
 
@@ -17,15 +16,13 @@ for file_name in file_names:
     if len(parts) > 1:
         prefix = parts[0]
 
-        # 创建文件夹
         folder_name = os.path.join(os.getcwd(), prefix)
         os.makedirs(folder_name, exist_ok=True)
 
-        # 移动文件到文件夹中
         source_path = os.path.join(os.getcwd(), file_name)
         destination_path = os.path.join(folder_name, file_name)
         shutil.move(source_path, destination_path)
 
-        print(f"文件已移动到文件夹: {folder_name}")
+        print(f"The file has been moved to the folder: {folder_name}")
     else:
-        print("文件名中没有下划线字符。")
+        print("There are no underscore characters in the file name.")
