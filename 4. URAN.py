@@ -13,7 +13,7 @@ from sklearn.metrics import roc_auc_score
 from imblearn.under_sampling import RandomUnderSampler
 import matplotlib
 from sklearn.model_selection import KFold
-kf = KFold(n_splits=5, random_state=None, shuffle=True) # 5折
+kf = KFold(n_splits=5, random_state=None, shuffle=True) # 5Folds
 matplotlib.use('TkAgg')
 from sklearn.linear_model import Lasso
 
@@ -30,16 +30,16 @@ from matplotlib.lines import Line2D
 import shap
 from sklearn.manifold import TSNE
 def plot(x, colors):
-    # 设置字体
+    # Set the font
     plt.rcParams["font.family"] = "Times New Roman"
     padding = 0.1
     target_ratio = 4 / 5
-    # 定义颜色调色板和类别名称
+    # Define the color palette and category names
     palette = np.array(sns.color_palette("pastel", 2))
     labels = ["HER2-Unchanged", "HER2-changed"]
-    # 创建图形
+    # Create graphics
     fig, ax = plt.subplots(figsize=(10, 8))
-    # 绘制每个类别的数据点，并添加图例标签
+    # Draw the data points of each category and add legend labels
     for i, label in enumerate(labels):
         ax.scatter(
             x[colors == i, 0], x[colors == i, 1],
@@ -47,52 +47,50 @@ def plot(x, colors):
         )
 
 
-    # 计算数据范围
+    # Calculate the data range
     x_min, x_max = x[:, 0].min(), x[:, 0].max()
     y_min, y_max = x[:, 1].min(), x[:, 1].max()
     x_range = x_max - x_min
     y_range = y_max - y_min
-    # 添加边距
+    # Add margins
     x_min -= x_range * padding
     x_max += x_range * padding
     y_min -= y_range * padding
     y_max += y_range * padding
-    # 根据目标比例调整范围
+    # Adjust the range according to the target proportion
     current_ratio = (y_max - y_min) / (x_max - x_min)
     if current_ratio < target_ratio:
-        # 调整 y 轴范围
         new_y_range = (x_max - x_min) * target_ratio
         y_center = (y_max + y_min) / 2
         y_min, y_max = y_center - new_y_range / 2, y_center + new_y_range / 2
     else:
-        # 调整 x 轴范围
         new_x_range = (y_max - y_min) / target_ratio
         x_center = (x_max + x_min) / 2
         x_min, x_max = x_center - new_x_range / 2, x_center + new_x_range / 2
 
-    # 设置调整后的坐标轴范围和纵横比
+    # Set the adjusted coordinate axis range and aspect ratio
     ax.set_xlim(x_min, x_max)
     ax.set_ylim(y_min, y_max)
-    ax.set_aspect(target_ratio)  # 设置目标纵横比
+    ax.set_aspect(target_ratio)  
 
-    # 自动计算适合的坐标轴间隔
+    # Automatically calculate the appropriate coordinate axis intervals
     x_ticks = np.linspace(x_min, x_max, num=6)
     y_ticks = np.linspace(y_min, y_max, num=6)
     ax.set_xticks(x_ticks)
     ax.set_yticks(y_ticks)
 
-    # 添加图例，用大点块表示类别
+    # Add legends and represent the categories with large dot blocks
     legend_elements = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor=palette[i],
                markersize=15, label=labels[i]) for i in range(2)
     ]
     ax.legend(handles=legend_elements, title="HER2 STATUS", loc="upper right", fontsize=11)
-    # 添加方法名称 "CNN" 在图的右下角
+
     ax.text(0.95, 0.05, "HKFSNet", transform=ax.transAxes, fontsize=16,
             weight='bold', color='black', ha='right', va='bottom',
             path_effects=[pe.Stroke(linewidth=3, foreground="white"), pe.Normal()])
     plt.show()
-    plt.savefig('./output_with_aspect_and_legend.png', dpi=300, bbox_inches='tight')  # 输出图像
+    plt.savefig('./output_with_aspect_and_legend.png', dpi=300, bbox_inches='tight') 
     return fig, ax
 def soft_threshold(l, x):
     return torch.sign(x) * torch.relu(torch.abs(x) - l)
@@ -119,14 +117,13 @@ def HKFS(train_data_original, alpha, label, M = 10):
     alpha = alpha
     HKFS = Lasso(alpha=alpha, random_state=1, max_iter=M)#10000
     HKFS.fit(x, y)
-    # 返回相关系数是否为0的布尔数组
     mask = HKFS.coef_ != 0.0
-    # 对特征进行选择
+    # Select the features
     x = x.loc[:, mask]
     # result = pd.concat([x, y], axis=1)
     train_data = pd.concat([train_data_original['namelist'], x], axis=1)
     return train_data
-# 示例数据（替换为你的实际数据）114
+
 '''
 train: val: test = 7 : 1 : 2 
 '''
@@ -140,7 +137,7 @@ train_data_original = pd.read_excel(r'.\datasets\BUS_UCLM.xlsx', header=0, sheet
 labels = pd.read_excel(r'.\datasets\BUS_UCLM.xlsx', header=0, usecols="B", sheet_name="namelist")
 train_data = HKFS(train_data_original, 0.09117, labels)
 print(train_data.shape)
-# 根据名单中的名称提取数据
+
 extracted_train_data = train_data[train_data['namelist'].isin(X_train_name['namelist'])]
 extracted_val_data = train_data[train_data['namelist'].isin(X_val_name['namelist'])]
 extracted_test_data = train_data[train_data['namelist'].isin(X_test_name['namelist'])]
@@ -148,9 +145,9 @@ extracted_test_data = train_data[train_data['namelist'].isin(X_test_name['nameli
 extracted_train_label = extracted_train_data[extracted_train_data['namelist'].isin(X_train_name['namelist'])]
 extracted_val_label = extracted_val_data[extracted_val_data['namelist'].isin(X_val_name['namelist'])]
 extracted_test_label = extracted_test_data[extracted_test_data['namelist'].isin(X_test_name['namelist'])]
-# 创建一个字典，将标签映射到相应的值
+# Create a dictionary and map the labels to the corresponding values
 label_mapping = dict(zip(train_data_value_A['namelist'], train_data_value_A['labels']))
-# 使用map函数将数据表中的内容映射到标签的值
+# Use the map function to map the contents in the data table to the values of the labels
 extracted_train_label['labels'] = extracted_train_label['namelist'].map(label_mapping)
 extracted_val_label['labels'] = extracted_val_label['namelist'].map(label_mapping)
 extracted_test_label['labels'] = extracted_test_label['namelist'].map(label_mapping)
@@ -164,18 +161,18 @@ y_train = extracted_train_label['labels']
 y_val = extracted_val_label['labels']
 y_test = extracted_test_label['labels']
 
-# 标准化数据
+# Standardized data
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_val = scaler.fit_transform(X_val)
 X_test = scaler.fit_transform(X_test)
 
-# 对标签进行独热编码
+# Perform exclusive heat coding on the labels
 y_train = to_categorical(y_train, num_classes=2)
 y_val = to_categorical(y_val, num_classes=2)
 y_test = to_categorical(y_test, num_classes=2)
 
-# 转换为 PyTorch Tensor
+# Convert to PyTorch Tensor
 X_train_tensor = torch.FloatTensor(X_train)
 y_train_tensor = torch.LongTensor(y_train)
 X_val_tensor = torch.FloatTensor(X_val)
@@ -183,7 +180,7 @@ y_val_tensor = torch.LongTensor(y_val)
 X_test_tensor = torch.FloatTensor(X_test)
 y_test_tensor = torch.LongTensor(y_test)
 
-# 训练模型
+# Train the model
 train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
 val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
 test_dataset = TensorDataset(X_test_tensor, y_test_tensor)
@@ -197,7 +194,7 @@ val_loader = DataLoader(val_dataset, batch_size=batch_Size[1], shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=batch_Size[2], shuffle=True)
 
 
-# 定义全连接神经网络模型
+# Define the URAN model
 class URAN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size ,channel=2,reduction=16):
         super(URAN, self).__init__()
@@ -216,7 +213,7 @@ class URAN(nn.Module):
         self.fc3 = nn.Linear(hidden_size, output_size)
         self.relu2 = nn.ReLU()
 
-        self.softmax = nn.Softmax(dim=1)  # 添加 softmax 激活函数
+        self.softmax = nn.Softmax(dim=1)  
         self.dropout = nn.Dropout(p=0.4)
     def forward(self, x):
 
@@ -238,7 +235,7 @@ class URAN(nn.Module):
         return x
 
 
-def Sensitivity_score(Y_test, Y_pred, n):  # n为分类数
+def Sensitivity_score(Y_test, Y_pred, n):  
 
     sen = []
     con_mat = confusion_matrix(Y_test, Y_pred)
@@ -265,10 +262,10 @@ def Specificity_score(Y_test, Y_pred, n):
 
     return spe
 
-# 模型初始化
-input_size = X_train.shape[1]  # 输入特征的维度
+# Model initialization
+input_size = X_train.shape[1]  
 # hidden_size = 200         #185   220  262  219
-output_size = 2  # 三分类问题
+output_size = 2  
 
 i = 1
 accuracy_list = list()
@@ -281,46 +278,43 @@ best_metric = 0
 
 # for seed in range(100, 2000):
 for b in range(4, 5):
-    # c = [num for num in a if num != (b)]  # 其余的数作为c
     print(f"{b+1}_fold")
     seed = b
 
-    # 为CPU中设置种子，生成随机数
-    # ======设置随机种子==============
+    # Set the seeds in the CPU and generate random numbers
+    # ======Set random seeds==============
     '''
     1：0.61 42：0.57 0: 59 2:59.13 3:61.2912% 4: 60.11% 5:58.91% 6: 63.17% 7:54.91% 8:56.94% 9: 51.65% 10:57.72%
     11:58 12:60 13:56 14:59.12% 15:56.78% 16:60.46% 17:52.66% 18:52.86%  19:56.54% 
     '''
 
     torch.manual_seed(seed)
-    # 划分训练集和测试集5次交叉验证
+    # Divide the training set and the test set for cross-validation five times
     for split_num in range(5):
         print('split_num=', split_num)
         model = URAN(input_size, hidden_size, output_size)
         model.__init__(input_size, hidden_size, output_size)
 
-        # 损失函数和优化器
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=0.00005)#lr=0.0006)
 
         for epoch in range(num_epochs):
             model.train()
-            total_loss = 0.0  # 用于累积每个epoch的损失
+            total_loss = 0.0  
             for batch_X, batch_y in train_loader:
                 optimizer.zero_grad()
                 # optimizer1.zero_grad()
                 output = model(batch_X)
-                loss = criterion(output, batch_y.float())  # 这里不需要再应用 softmax，CrossEntropyLoss 会处理
+                loss = criterion(output, batch_y.float()) 
                 loss.backward()
                 optimizer.step()
                 # optimizer1.step()
                 total_loss += loss.item()
 
-            # 打印每个epoch的平均损失
             if epoch % 2 == 0:
                 average_loss = total_loss / len(train_loader)
                 # print(f'Epoch [{epoch + 1}/{num_epochs}], Average Loss: {average_loss:.4f}')
-                # 计算并打印训练集的准确度
+                # Calculate and print the accuracy of the training set
                 model.eval()
                 with torch.no_grad():
                     correct_train = 0
@@ -350,7 +344,7 @@ for b in range(4, 5):
             #         plot(digits_final, y_tSNE)
 
 
-        # 在验证集上评估模型
+        # Evaluate the model on the validation set
         model.eval()
         with torch.no_grad():
             correct = 0
@@ -363,19 +357,18 @@ for b in range(4, 5):
                 # print(f'Predicted Labels: {predicted.tolist()}')
                 # print(f'Actual Labels   : {batch_y.tolist()}')
 
-                # 计算准确率、召回率、F1分数和精确率
                 accuracy = accuracy_score(batch_y, predicted)
                 recall = recall_score(batch_y, predicted, average='macro')
                 precision = precision_score(batch_y, predicted, average='macro')
                 f1 = f1_score(batch_y, predicted, average='macro')
-                # 计算ROC曲线下的面积（AUC）
+
                 y_pred = np.argmax(output.data, axis=1)
                 auc_score = roc_auc_score(batch_y, y_pred, multi_class='ovr')
 
             i += 1
 
 
-        #模型保存
+        # Model saving
         metric = auc_score
         if metric > best_metric:
             best_metric = metric
@@ -390,7 +383,7 @@ for b in range(4, 5):
                 print('saved new best metric model')
 
 
-        # 在测试集上评估模型
+        # Evaluate the model on the test set
         model.eval()
         with torch.no_grad():
             correct = 0
@@ -403,7 +396,6 @@ for b in range(4, 5):
                 # print(f'Predicted Labels: {predicted.tolist()}')
                 # print(f'Actual Labels   : {batch_y.tolist()}')
 
-            # 计算准确率、召回率、F1分数和精确率
             accuracy = accuracy_score(batch_y, predicted)
             recall = recall_score(batch_y, predicted, average='micro')
             precision = precision_score(batch_y, predicted, average='macro')
@@ -411,7 +403,6 @@ for b in range(4, 5):
 
             Specificity = Specificity_score(batch_y, predicted, 2)
 
-            # 计算ROC曲线下的面积（AUC）
             y_pred = np.argmax(output.data, axis=1)
             auc_score = roc_auc_score(batch_y, y_pred, multi_class='ovr')
 
