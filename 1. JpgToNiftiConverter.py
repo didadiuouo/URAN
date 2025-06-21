@@ -8,7 +8,7 @@ import numpy as np
 from PIL import Image
 import os
 
-import matplotlib.pyplot as plt  # plt 用于显示图片
+import matplotlib.pyplot as plt 
 
 src_folder = r"E:\baidunetdiskdownload\BUS_UCLM\image"
 def save_array_as_nii_volume(data, filename, reference_name=None):
@@ -55,7 +55,7 @@ for file_name in file_names:
     #     allImg[i, :, :] = img_as_np
     #
     #
-    # # 检查数据的最小值和最大值
+    # # Check the minimum and maximum values of the data
     # #     print(f"Data min: {np.min(allImg)}, Data max: {np.max(allImg)}")
     # # np.transpose(allImg,[2,0,1])
     # save_array_as_nii_volume(allImg,
