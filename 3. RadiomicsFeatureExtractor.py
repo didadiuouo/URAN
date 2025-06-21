@@ -1,6 +1,5 @@
 '''
-说明：影像组学特征提取
-
+Description: Radiomics feature extraction
 '''
 from __future__ import print_function
 import six
@@ -38,7 +37,7 @@ def catch_features(imagePath,maskPath):
     extractor.enableAllFeatures()
     extractor.enableFeaturesByName(firstorder=['Energy', 'TotalEnergy', 'Entropy', 'Minimum', '10Percentile', '90Percentile', 'Maximum', 'Mean', 'Median', 'InterquartileRange', 'Range', 'MeanAbsoluteDeviation', 'RobustMeanAbsoluteDeviation', 'RootMeanSquared', 'StandardDeviation', 'Skewness', 'Kurtosis', 'Variance', 'Uniformity'])
     extractor.enableFeaturesByName(shape=['VoxelVolume', 'MeshVolume', 'SurfaceArea', 'SurfaceVolumeRatio', 'Compactness1', 'Compactness2', 'Sphericity', 'SphericalDisproportion','Maximum3DDiameter','Maximum2DDiameterSlice','Maximum2DDiameterColumn','Maximum2DDiameterRow', 'MajorAxisLength', 'MinorAxisLength', 'LeastAxisLength', 'Elongation', 'Flatness'])
-# 上边两句我将一阶特征和形状特征中的默认禁用的特征都手动启用，为了之后特征筛选
+
     print('Enabled filters:\n\t', extractor.enabledImagetypes)
     feature_cur = []
     feature_name = []
