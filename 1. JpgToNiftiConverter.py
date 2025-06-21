@@ -1,7 +1,6 @@
 '''
-
-普通图片转成NTFKI医学图像nii
-分别转换原图和MASK
+Convert ordinary images to NTFKI medical images nii
+Convert the original image and the MASK respectively
 '''
 import SimpleITK as sitk
 import glob
