@@ -445,7 +445,7 @@ for b in range(4, 5):
         f"Average Precisions: {np.mean(precision_list):.4f}±{np.std(precision_list) / np.sqrt(len(precision_list)):.4f}  95% CI: {Precisions_interval}")
 
 
-# # 假设你有一个特征名称列表
+# # draw_shap
 # feature_names = pd.read_excel(r'.\417feature\label1\label1.xlsx', header=None, nrows=1)#usecols="B:AGF"
 # from draw_shap import draw_shap
 # draw_shap(model=model, feature_names=feature_names, X_test_tensor=X_test_tensor)
