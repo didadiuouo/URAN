@@ -21,22 +21,32 @@ The specific flow chart is shown below
 Usage
 1. JpgToNiftiConverter.py
    
-Converts a folder of JPG images to NIfTI format.
+   Converts a folder of JPG images to NIfTI format.
 
 2. DataLoaderOrganizer.py
 
-Organizes images and labels into a single folder.
+   Organizes images and labels into a single folder.
 
 3. RadiomicsFeatureExtractor.py
    
-Extracts radiomics features from medical images.
+   Extracts radiomics features from medical images.
 
 4. URAN.py
    
-Predicts HER2 status changes using a URAN model.
+   Predicts HER2 status changes using a URAN model.
 
 
 Contributing
 
 Contributions are welcome! Please submit a pull request or open an issue for suggestions or bug reports.
 
+If you find our research if usefull, please site as follows:
+
+   @article{liu2025prediction,
+     title={Prediction of breast cancer HER2 status changes based on ultrasound radiomics attention network},
+     author={Liu, Jian and Xue, Xinzheng and Yan, Yuqi and Song, Qian and Cheng, Yuhu and Wang, Liping and Wang, Xuesong and Xu, Dong},
+     journal={Computer Methods and Programs in Biomedicine},
+     pages={108987},
+     year={2025},
+     publisher={Elsevier}
+   }
