@@ -40,7 +40,7 @@ Contributing
 
 Contributions are welcome! Please submit a pull request or open an issue for suggestions or bug reports.
 
-If you find our research if usefull, please site as follows:
+If you find our research is usefull, please site as follows:
 
    @article{liu2025prediction,
      title={Prediction of breast cancer HER2 status changes based on ultrasound radiomics attention network},
